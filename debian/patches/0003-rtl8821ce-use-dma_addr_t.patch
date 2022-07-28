@@ -1,0 +1,26 @@
+From e5a4b2be3f37476ee079e8d4e96bc9cc4a6bd4b5 Mon Sep 17 00:00:00 2001
+From: You-Sheng Yang <vicamo@gmail.com>
+Date: Mon, 17 Feb 2020 18:00:31 +0800
+Subject: [PATCH] rtl8821ce: use dma_addr_t
+
+Signed-off-by: You-Sheng Yang <vicamo@gmail.com>
+---
+ hal/rtl8821c/pci/rtl8821ce_halmac.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/hal/rtl8821c/pci/rtl8821ce_halmac.c b/hal/rtl8821c/pci/rtl8821ce_halmac.c
+index 1100cdf..100d69d 100755
+--- a/hal/rtl8821c/pci/rtl8821ce_halmac.c
++++ b/hal/rtl8821c/pci/rtl8821ce_halmac.c
+@@ -24,7 +24,7 @@ static u8 pci_write_port_not_xmitframe(void *d,  u32 size, u8 *pBuf, u8 qsel)
+ 	PADAPTER padapter = dvobj_get_primary_adapter(pobj);
+ 	u32 page_size = 0;
+ 	u8 *txbd;
+-	u64 txbd_dma;
++	dma_addr_t txbd_dma;
+ 	u8 ret = _SUCCESS;
+ 	dma_addr_t mapping;
+ 
+-- 
+2.25.0
+

@@ -1,0 +1,50 @@
+From b30990ee9c3a0e2fd29d068bb77bfbd8baed33a6 Mon Sep 17 00:00:00 2001
+From: Paolo Pisati <paolo.pisati@canonical.com>
+Date: Fri, 4 Dec 2020 12:17:24 +0000
+Subject: [PATCH 2/2] kernel_write() has been around since v4.0 and it takes
+ care of the get_fs()/set_fs() switch for kernels that need it (Linux < 5.10)
+
+Signed-off-by: Paolo Pisati <paolo.pisati@canonical.com>
+---
+ os_dep/osdep_service.c | 10 +---------
+ 1 file changed, 1 insertion(+), 9 deletions(-)
+
+diff --git a/os_dep/osdep_service.c b/os_dep/osdep_service.c
+index 0bb985d..0c1a7a4 100644
+--- a/os_dep/osdep_service.c
++++ b/os_dep/osdep_service.c
+@@ -2164,7 +2164,7 @@ static int writeFile(struct file *fp, char *buf, int len)
+ 		return -EPERM;
+ 
+ 	while (sum < len) {
+-		wlen = fp->f_op->write(fp, buf + sum, len - sum, &fp->f_pos);
++		wlen = kernel_write(fp, buf + sum, len - sum, &fp->f_pos);
+ 		if (wlen > 0)
+ 			sum += wlen;
+ 		else if (0 != wlen)
+@@ -2250,7 +2250,6 @@ static int retriveFromFile(const char *path, u8 *buf, u32 sz)
+ static int storeToFile(const char *path, u8 *buf, u32 sz)
+ {
+ 	int ret = 0;
+-	mm_segment_t oldfs;
+ 	struct file *fp;
+ 
+ 	if (path && buf) {
+@@ -2258,14 +2257,7 @@ static int storeToFile(const char *path, u8 *buf, u32 sz)
+ 		if (0 == ret) {
+ 			RTW_INFO("%s openFile path:%s fp=%p\n", __FUNCTION__, path , fp);
+ 
+-			oldfs = get_fs();
+-			#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0))
+-			set_fs(KERNEL_DS);
+-			#else
+-			set_fs(get_ds());
+-			#endif
+ 			ret = writeFile(fp, buf, sz);
+-			set_fs(oldfs);
+ 			closeFile(fp);
+ 
+ 			RTW_INFO("%s writeFile, ret:%d\n", __FUNCTION__, ret);
+-- 
+2.29.2
+

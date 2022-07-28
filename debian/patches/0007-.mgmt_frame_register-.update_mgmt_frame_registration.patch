@@ -1,0 +1,63 @@
+From: =?utf-8?q?Tom=C3=A1s_Pinho?= <me@tomaspinho.com>
+Date: Mon, 22 Jun 2020 15:09:01 +0100
+Subject: [PATCH] .mgmt_frame_register -> .update_mgmt_frame_registrations
+
+(backported from commit 5e7d1302d3c4802a74b227f7a0fa4757e9d2c752
+https://github.com/tomaspinho/rtl8821ce.git)
+Signed-off-by: You-Sheng Yang <vicamo@gmail.com>
+---
+ os_dep/linux/ioctl_cfg80211.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
+
+diff --git a/os_dep/linux/ioctl_cfg80211.c b/os_dep/linux/ioctl_cfg80211.c
+index 2f64cb0..820689a 100755
+--- a/os_dep/linux/ioctl_cfg80211.c
++++ b/os_dep/linux/ioctl_cfg80211.c
+@@ -7315,11 +7315,22 @@ static void cfg80211_rtw_mgmt_frame_register(struct wiphy *wiphy,
+ #else
+ 	struct net_device *ndev,
+ #endif
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
++	struct mgmt_frame_regs *upd)
++#else
+ 	u16 frame_type, bool reg)
++#endif
++
+ {
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3, 6, 0))
+ 	struct net_device *ndev = wdev_to_ndev(wdev);
+ #endif
++
++/* hardcoded always true, to make it pass compilation */
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
++	bool reg = true;
++#endif
++
+ 	_adapter *adapter;
+ 
+ 	struct rtw_wdev_priv *pwdev_priv;
+@@ -7338,7 +7349,12 @@ static void cfg80211_rtw_mgmt_frame_register(struct wiphy *wiphy,
+ 	/* Wait QC Verify */
+ 	return;
+ 
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
++	switch (upd->interface_stypes) {
++#else
+ 	switch (frame_type) {
++#endif
++
+ 	case IEEE80211_STYPE_PROBE_REQ: /* 0x0040 */
+ 		SET_CFG80211_REPORT_MGMT(pwdev_priv, IEEE80211_STYPE_PROBE_REQ, reg);
+ 		break;
+@@ -9639,7 +9655,11 @@ static struct cfg80211_ops rtw_cfg80211_ops = {
+ 
+ #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 37)) || defined(COMPAT_KERNEL_RELEASE)
+ 	.mgmt_tx = cfg80211_rtw_mgmt_tx,
++#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 8, 0))
++	.update_mgmt_frame_registrations = cfg80211_rtw_mgmt_frame_register,
++#else
+ 	.mgmt_frame_register = cfg80211_rtw_mgmt_frame_register,
++#endif
+ #elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2, 6, 34) && LINUX_VERSION_CODE <= KERNEL_VERSION(2, 6, 35))
+ 	.action = cfg80211_rtw_mgmt_tx,
+ #endif

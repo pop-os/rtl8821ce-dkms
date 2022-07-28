@@ -1,0 +1,104 @@
+rtl8821ce (5.5.2.1-0ubuntu11) kinetic; urgency=medium
+
+  * Linux 5.19 compatibility (LP: #1982080):
+    - debian/patches/0020-support-linux-5.19.patch
+
+ -- Andrea Righi <andrea.righi@canonical.com>  Tue, 19 Jul 2022 07:33:49 +0000
+
+rtl8821ce (5.5.2.1-0ubuntu10) jammy; urgency=medium
+
+  * Drop manual autopkgtest in favor of using the autodep8 one.
+
+ -- Dimitri John Ledkov <dimitri.ledkov@canonical.com>  Mon, 11 Apr 2022 15:22:26 +0100
+
+rtl8821ce (5.5.2.1-0ubuntu9) jammy; urgency=medium
+
+  * Cherrypick Linux 5.17 support patch, and adjust dkms.conf to exclude
+    building on wifi-less kernels. LP: #1968297
+
+ -- Dimitri John Ledkov <dimitri.ledkov@canonical.com>  Fri, 08 Apr 2022 10:15:52 +0100
+
+rtl8821ce (5.5.2.1-0ubuntu8) jammy; urgency=medium
+
+  * Linux 5.15 support 
+
+ -- Paolo Pisati <paolo.pisati@canonical.com>  Wed, 29 Sep 2021 08:53:52 +0000
+
+rtl8821ce (5.5.2.1-0ubuntu7) impish; urgency=medium
+
+  * Linux 5.12 support
+
+ -- Paolo Pisati <paolo.pisati@canonical.com>  Wed, 05 May 2021 15:50:52 +0000
+
+rtl8821ce (5.5.2.1-0ubuntu6) hirsute; urgency=medium
+
+  * Blacklist built-in rtw88_8821ce (LP: #1911605)
+
+  * Update CI release series
+
+ -- You-Sheng Yang <vicamo.yang@canonical.com>  Fri, 22 Jan 2021 18:00:33 +0800
+
+rtl8821ce (5.5.2.1-0ubuntu5) hirsute; urgency=medium
+
+  * Convert readFile()/writeFile() to use kernel_read()/write_file() and fix
+    FTBFS with Linux 5.10
+
+ -- Paolo Pisati <paolo.pisati@canonical.com>  Fri, 04 Dec 2020 12:25:56 +0000
+
+rtl8821ce (5.5.2.1-0ubuntu4) groovy; urgency=medium
+
+  * Reconcile with debian/sid.
+    - migrate to debhelper compatible level 12.
+    - address lintian warnings
+    - enable GitLab CI
+    - enable autopkgtest
+
+  * Fix build against v5.8 kernel (LP: #1884648)
+
+  * Add missing supplier data rates (22, 33MB) (LP: #1865147)
+
+ -- You-Sheng Yang <vicamo.yang@canonical.com>  Fri, 03 Jul 2020 15:43:11 +0800
+
+rtl8821ce (5.5.2.1-0ubuntu3) focal; urgency=medium
+
+  * debian/control:
+    - build all architectures again.
+
+  * debian/patches/*:
+    - make: support build from multi-arched debian-based platform
+    - rtl8821ce: use dma_addr_t
+    - rtl8821ce: guard wireless_send_event with CONFIG_WIRELESS_EXT instead
+
+ -- You-Sheng Yang <vicamo.yang@canonical.com>  Mon, 17 Feb 2020 21:04:38 +0800
+
+rtl8821ce (5.5.2.1-0ubuntu2) focal; urgency=medium
+
+  * debian/control:
+    - build on amd64 only
+
+ -- You-Sheng Yang <vicamo.yang@canonical.com>  Mon, 10 Feb 2020 16:04:34 +0800
+
+rtl8821ce (5.5.2.1-0ubuntu1) focal; urgency=medium
+
+  * New upstream release. (LP: #1861669)
+    - rtl8821CE_WiFi_linux_v5.5.2_34066.20190614_COEX20180712-3232.tar.gz
+    - rtl8821CE_WiFi_linux_v5.5.2.1_35598.20191029_COEX20180712-3232.tar.gz
+
+  * rtl8821ce
+    - respect some more environment vars
+    - fix build against kernel >= v5.3
+    - disable debug messages
+
+  * debian/*:
+    - update Vcs URLs
+    - enable parallel build
+    - fix DKMS builds
+    - explicitely add missed build dependency: bc, quilt
+
+ -- You-Sheng Yang <vicamo.yang@canonical.com>  Mon, 03 Feb 2020 17:45:11 +0800
+
+rtl8821ce (5.2.5.2.1.30816.20190425-0ubuntu1) eoan; urgency=medium
+
+  * Initial release (LP: #1837876)
+
+ -- Anthony Wong <anthony.wong@canonical.com>  Mon, 24 Jun 2019 19:39:31 +0800

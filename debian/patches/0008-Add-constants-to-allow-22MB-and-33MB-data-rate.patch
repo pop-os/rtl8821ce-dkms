@@ -1,0 +1,52 @@
+From: Vivien HENRIET <bubuabu@bubuabu.org>
+Date: Tue, 24 Mar 2020 23:30:43 +0100
+Subject: Add constants to allow 22MB and 33MB data rate
+
+The update of the driver to the version 'Realtek v5.5.2' introduce
+a check of the DR broadcasted in the WLAN_EID_SUPP_RATES IE.
+As a conseconsed AP with 22MB or 33MB Data Rate are filtered out.
+The check has been added in to function collect_bss_info of rtw_mlne_ext.c
+and performed in the function rtw_validate_value of rtw_wlan_util.c
+
+Adding these constants will allow to make the AP available again.
+Even if I did not observe any issue, I don't known if the driver is
+able to support such data rate.
+
+Anyway this patch permits to connect again on "Freebox" AP, the modem
+provided by French ISP "Free". Issue #64
+
+(backported from commit 901aee33e1862adf9e18ce2fcc9388c5b5ee41f2
+https://github.com/tomaspinho/rtl8821ce.git)
+Signed-off-by: You-Sheng Yang <vicamo@gmail.com>
+---
+ core/rtw_wlan_util.c | 2 ++
+ include/ieee80211.h  | 3 +++
+ 2 files changed, 5 insertions(+)
+
+diff --git a/core/rtw_wlan_util.c b/core/rtw_wlan_util.c
+index ce2df3b..612d4de 100644
+--- a/core/rtw_wlan_util.c
++++ b/core/rtw_wlan_util.c
+@@ -2290,6 +2290,8 @@ u8 support_rate_ranges[] = {
+ 	IEEE80211_OFDM_RATE_36MB,
+ 	IEEE80211_OFDM_RATE_48MB,
+ 	IEEE80211_OFDM_RATE_54MB,
++	IEEE80211_PBCC_RATE_22MB,
++	IEEE80211_PBCC_RATE_33MB,
+ };
+ 
+ inline bool match_ranges(u16 EID, u32 value)
+diff --git a/include/ieee80211.h b/include/ieee80211.h
+index c87a5b2..cec9856 100644
+--- a/include/ieee80211.h
++++ b/include/ieee80211.h
+@@ -817,6 +817,9 @@ struct ieee80211_snap_hdr {
+ #define IEEE80211_OFDM_RATE_36MB		0x48
+ #define IEEE80211_OFDM_RATE_48MB		0x60
+ #define IEEE80211_OFDM_RATE_54MB		0x6C
++#define IEEE80211_PBCC_RATE_22MB		0x2c
++#define IEEE80211_PBCC_RATE_33MB		0x42
++
+ #define IEEE80211_BASIC_RATE_MASK		0x80
+ 
+ #define IEEE80211_CCK_RATE_1MB_MASK		(1<<0)

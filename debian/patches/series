@@ -1,0 +1,14 @@
+0001-make-support-build-from-multi-arched-debian-based-pl.patch
+0002-Fixes-for-Linux-5.3.patch
+0003-rtl8821ce-use-dma_addr_t.patch
+0004-rtl8821ce-guard-wireless_send_event-with-CONFIG_WIRE.patch
+0005-make-support-build-from-multi-arched-debian-based-pl.patch
+0006-rtl8821ce-move-struct-sha256_state-definition-into-r.patch
+0007-.mgmt_frame_register-.update_mgmt_frame_registration.patch
+0008-Add-constants-to-allow-22MB-and-33MB-data-rate.patch
+0001-kernel_read-has-been-around-since-2.6.x-and-it-takes.patch
+0002-kernel_write-has-been-around-since-v4.0-and-it-takes.patch
+0009-fix-deprecated-GRO_DROP-constant-usage.patch
+0010-remove-ipx-support.patch
+7b9e55df64b10fed785f22df9f36ed4a30b59d0e.patch
+0020-support-linux-5.19.patch

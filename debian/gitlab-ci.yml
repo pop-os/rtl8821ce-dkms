@@ -1,0 +1,7 @@
+include:
+  - https://gitlab.com/hustle-ci/pipeline/raw/master/salsa-ci.yml
+  - https://gitlab.com/hustle-ci/pipeline/raw/master/pipeline-jobs.yml
+
+variables:
+  RELEASE: 'hirsute'
+  SALSA_CI_DISABLE_APTLY: 'false'

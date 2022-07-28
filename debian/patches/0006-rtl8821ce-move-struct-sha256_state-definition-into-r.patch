@@ -1,0 +1,49 @@
+From: You-Sheng Yang <vicamo@gmail.com>
+Date: Fri, 3 Jul 2020 17:53:36 +0800
+Subject: rtl8821ce: move struct sha256_state definition into rtw_security.c
+
+struct sha256_state may conflict with that in kernel crypto/sha.h when
+compiled against v5.8 or above. While they have different members,
+simply removing them is not an option.
+
+Signed-off-by: You-Sheng Yang <vicamo@gmail.com>
+---
+ core/rtw_security.c    | 7 +++++++
+ include/rtw_security.h | 6 ------
+ 2 files changed, 7 insertions(+), 6 deletions(-)
+
+diff --git a/core/rtw_security.c b/core/rtw_security.c
+index b537a26..af7ca09 100644
+--- a/core/rtw_security.c
++++ b/core/rtw_security.c
+@@ -2132,6 +2132,13 @@ BIP_exit:
+ 
+ #ifndef PLATFORM_FREEBSD
+ #if defined(CONFIG_TDLS)
++
++struct sha256_state {
++	u64 length;
++	u32 state[8], curlen;
++	u8 buf[64];
++};
++
+ /* compress 512-bits */
+ static int sha256_compress(struct sha256_state *md, unsigned char *buf)
+ {
+diff --git a/include/rtw_security.h b/include/rtw_security.h
+index ac8432e..ab07f5f 100644
+--- a/include/rtw_security.h
++++ b/include/rtw_security.h
+@@ -249,12 +249,6 @@ struct security_priv {
+ #define SEC_IS_BIP_KEY_INSTALLED(sec) _FALSE
+ #endif
+ 
+-struct sha256_state {
+-	u64 length;
+-	u32 state[8], curlen;
+-	u8 buf[64];
+-};
+-
+ #define GET_ENCRY_ALGO(psecuritypriv, psta, encry_algo, bmcst)\
+ 	do {\
+ 		switch (psecuritypriv->dot11AuthAlgrthm) {\

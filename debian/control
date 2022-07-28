@@ -1,0 +1,30 @@
+Source: rtl8821ce
+Section: kernel
+Priority: optional
+Maintainer: Ubuntu Developers <ubuntu-devel-discuss@lists.ubuntu.com>
+XSBC-Original-Maintainer: Canonical HWE Team <canonical-hwe@lists.canonical.com>
+Rules-Requires-Root: no
+Build-Depends:
+ debhelper-compat (= 12),
+ dh-modaliases,
+ dkms,
+ quilt,
+Standards-Version: 4.5.0
+Homepage: https://launchpad.net/ubuntu/+source/rtl8821ce
+Vcs-Git: https://git.launchpad.net/~canonical-hwe-team/ubuntu/+source/rtl8821ce-dkms/+git/rtl8821ce-dkms
+Vcs-Browser: https://git.launchpad.net/~canonical-hwe-team/ubuntu/+source/rtl8821ce-dkms/+git/rtl8821ce-dkms
+
+Package: rtl8821ce-dkms
+Architecture: all
+Depends:
+ ${misc:Depends},
+ bc,
+ dkms,
+XB-Modaliases: ${modaliases}
+Description: DKMS source for the Realtek 8821C PCIe Wi-Fi driver
+ Realtek provides the solution for WLAN in hardware and software. The software
+ package could be adopted for Realtek RTL8821CE WLAN series hardware on Linux
+ based platforms.
+ .
+ This package provides the DKMS source code for the rtl8821ce kernel module.
+ Kernel source or headers are required to compile these modules.

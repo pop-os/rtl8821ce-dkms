@@ -1,0 +1,3 @@
+rtl8821ce source: source-contains-prebuilt-binary core/mesh/rtw_mesh.o
+rtl8821ce source: source-contains-prebuilt-binary core/mesh/rtw_mesh_hwmp.o
+rtl8821ce source: source-contains-prebuilt-binary core/mesh/rtw_mesh_pathtbl.o

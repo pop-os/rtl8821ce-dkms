@@ -1,0 +1,84 @@
+From 0dbcd1e72ddbfc72ca01c867c214fbcb026591fa Mon Sep 17 00:00:00 2001
+From: Paolo Pisati <paolo.pisati@canonical.com>
+Date: Fri, 4 Dec 2020 12:07:37 +0000
+Subject: [PATCH 1/2] kernel_read() has been around since 2.6.x, and it takes
+ care of the get_fs()/set_fs() switch for kernels that need it (Linux < 5.10)
+
+Signed-off-by: Paolo Pisati <paolo.pisati@canonical.com>
+---
+ os_dep/osdep_service.c | 23 -----------------------
+ 1 file changed, 23 deletions(-)
+
+diff --git a/os_dep/osdep_service.c b/os_dep/osdep_service.c
+index 35013ed..0bb985d 100644
+--- a/os_dep/osdep_service.c
++++ b/os_dep/osdep_service.c
+@@ -2143,13 +2143,7 @@ static int readFile(struct file *fp, char *buf, int len)
+ 		return -EPERM;
+ 
+ 	while (sum < len) {
+-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 14, 0))
+ 		rlen = kernel_read(fp, buf + sum, len - sum, &fp->f_pos);
+-#elif (LINUX_VERSION_CODE >= KERNEL_VERSION(4, 1, 0))
+-		rlen = __vfs_read(fp, buf + sum, len - sum, &fp->f_pos);
+-#else
+-		rlen = fp->f_op->read(fp, buf + sum, len - sum, &fp->f_pos);
+-#endif
+ 		if (rlen > 0)
+ 			sum += rlen;
+ 		else if (0 != rlen)
+@@ -2193,20 +2187,12 @@ static int isFileReadable(const char *path, u32 *sz)
+ {
+ 	struct file *fp;
+ 	int ret = 0;
+-	mm_segment_t oldfs;
+ 	char buf;
+ 
+ 	fp = filp_open(path, O_RDONLY, 0);
+ 	if (IS_ERR(fp))
+ 		ret = PTR_ERR(fp);
+ 	else {
+-		oldfs = get_fs();
+-		#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0))
+-		set_fs(KERNEL_DS);
+-		#else
+-		set_fs(get_ds());
+-		#endif
+-
+ 		if (1 != readFile(fp, &buf, 1))
+ 			ret = PTR_ERR(fp);
+ 
+@@ -2218,7 +2204,6 @@ static int isFileReadable(const char *path, u32 *sz)
+ 			#endif
+ 		}
+ 
+-		set_fs(oldfs);
+ 		filp_close(fp, NULL);
+ 	}
+ 	return ret;
+@@ -2234,7 +2219,6 @@ static int isFileReadable(const char *path, u32 *sz)
+ static int retriveFromFile(const char *path, u8 *buf, u32 sz)
+ {
+ 	int ret = -1;
+-	mm_segment_t oldfs;
+ 	struct file *fp;
+ 
+ 	if (path && buf) {
+@@ -2242,14 +2226,7 @@ static int retriveFromFile(const char *path, u8 *buf, u32 sz)
+ 		if (0 == ret) {
+ 			RTW_INFO("%s openFile path:%s fp=%p\n", __FUNCTION__, path , fp);
+ 
+-			oldfs = get_fs();
+-			#if (LINUX_VERSION_CODE >= KERNEL_VERSION(5, 1, 0))
+-			set_fs(KERNEL_DS);
+-			#else
+-			set_fs(get_ds());
+-			#endif
+ 			ret = readFile(fp, buf, sz);
+-			set_fs(oldfs);
+ 			closeFile(fp);
+ 
+ 			RTW_INFO("%s readFile, ret:%d\n", __FUNCTION__, ret);
+-- 
+2.29.2
+
