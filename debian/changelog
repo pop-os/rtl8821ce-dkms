@@ -1,3 +1,9 @@
+rtl8821ce (5.5.2.1-0ubuntu11pop1) jammy; urgency=medium
+
+  * Backport to Pop
+
+ -- Michael Aaron Murphy <mmstick@pm.me>  Thu, 28 Jul 2022 15:40:27 +0200
+
 rtl8821ce (5.5.2.1-0ubuntu11) kinetic; urgency=medium
 
   * Linux 5.19 compatibility (LP: #1982080):
